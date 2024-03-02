@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+           <!-- the below bean will create object of bus of type Vehicle and use the cleaningservice object of type vehicleservice -->
+           
+           <bean id="bus" class="com.vehicle.Bus">
+			   <!-- below constructor-arg tag is used for passing the constructor arguments to inject the object inside bus class using constructor-->
+			   <constructor-arg ref="petrol"></constructor-arg>
+		   </bean>
+		   <bean id="car" class="com.vehicle.Car">
+			   <!-- below property tag is used for setter injection i.e when you want to inject the object using setter method-->
+			   <property name="vs" ref="cleaning"></property>
+			   <!-- the name inside the property tag should be same as the object created in the Car class for VehicleService class and reference can be any of cleaning or petrol-->
+		   </bean>
+		   
+		   
+		   <!-- the below bean "cleaning" will create object of cleaningservice of type vehicleservice-->
+		   <bean id="cleaning" class="com.service.CleaningService"></bean>
+		   <bean id="petrol" class="com.service.PetrolService"></bean>
+</beans>
+
+

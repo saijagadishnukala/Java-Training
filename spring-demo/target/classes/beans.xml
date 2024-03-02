@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+           
+           <bean id="b1" class="com.npci.dao.EmployeeDaoV2"></bean>
+           
+           <bean id="b2" class="com.npci.service.EmployeeService">
+			   <property name="dao" ref="b1"></property>
+		   </bean>
+		   
+		   <bean id="b3" class="com.npci.dao.Datasource">
+			   <property name="url" value="www.google.com"></property>
+			   <property name="username" value="sai"></property>
+			   <property name="passwords" value="sai@123"></property>
+		   </bean>
+</beans>
+
+
