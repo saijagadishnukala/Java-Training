@@ -1,0 +1,123 @@
+design pattern:
+factory pattern
+singleton pattern
+adaptor pattern
+proxy pattern
+
+
+Framework simplifies developing applications by providing all the common features every application needs like type conversion, design pattern, 
+exception handling so that within less time developers can get more work done.
+
+spring is an application framework that helps to create various types of applications like 
+1. web based
+2. enterprise
+3. desktop application
+4. cloud based applications / microservices
+
+
+Dependency injection:
+one of the design pattern which takes care of initialize the objects in the application.
+It is a process where an object is supplied to another object, In spring framework there will be spring container that creates object and supplies them 
+to their dependencies.
+eg: DAO object supplying to service object, service object supplying to controller object.
+
+
+Spring Projects:
+
+XML file: This will configure the classess that spring framework must instantiate.
+Libraries: You must add spring libraries in project. We can use maven dependencies for this.
+
+Java Project=>convert to maven project=>add spring context in pom.xml
+
+Bean.xml
+
+<bean id="b1" 
+
+
+Activity:
+
+create a class called Datasource with 3 properties: URL, username and password, configure this class in xml by providing to url,username and password, 
+in the main class get the object of the datasource and print their properties.
+
+
+
+
+
+
+
+Spring Boot :
+
+
+ANNOTATIONS:
+
+@Component: This annotation lets spring container to create the object of the class, it is written on top of the class, it is a replacement to <bean> tag.
+
+@Service 
+@Restcontroller
+@Repository
+The above annotations are known as subtypes of @Component annotation, means any class having these annotations will be instantiated automatically.
+But it is suggested to use @Service for service layer classess and @Restcontroller for controller classes and @Repository for dao layer classes.
+
+@Autowired: This is used to supply the object to another object i.e for dependency object.
+
+@Controller and @Restcontroller both comes in controller layer. @Restcontroller is used in webservice where view is not part of application and @Controller is used
+in webapplication where view is part of application.
+
+@Bean
+@Primary it is used near @component annotation above the class to make it as primary choice while multiple beans are available for injection.
+
+@Qualifier:  It is used near @Autowired annotation above the injection to specify which class object needs to be injected.
+syntax: @Qualifier("default id of the class that you want to inject")
+
+*** default id for a class while calling context to create an object will be same as classname with small first letter.
+
+
+Properties & YAML: These are text files that can have the application properties
+YML is efficient because we dont write parent again and again.
+properties: a.b.c
+	    a.b.d
+yaml:a
+	b
+	   c
+	   d
+
+
+Building Jar/War:
+Your application can be packaged into jar/war so that 
+
+
+
+
+@Qualifier: It is used to supply the object when there are multiple instances matching
+
+
+Try it:
+Remove @Qualifier from the service, and user @Primary on top of any one Dao implementation and check what is the output.
+
+
+
+
+topics discussed:
+
+Dependency injection:
+ApplicationContext used to get get the objects from the spring container. beans.xml was the spring container in our projects.
+setter DI and constructor DI : <property name="should be name of the object created in the bean class"> and <constructor-arg> respectively.
+Property tag will call the setter method
+Springboot:
+	auto-configuration:
+		com.npci
+		@SpringBootApplication
+		com.npci.controller
+		com.npci.service
+@Component:has below subtype
+@Configuration
+@Service
+@Repository
+@Controller,@RestController
+
+@Autowired: dependency injection job
+	@qualifier and @Primary when multiple instances are there to prioritize.
+
+@Bean: on top of method to create objects in the method.
+
+by default we have application.properties , alternate is yaml(yml). YML is efficient because we dont have to write the parent multiple times.

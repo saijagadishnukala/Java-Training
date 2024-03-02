@@ -1,0 +1,221 @@
+You can use anonymous implementation to avoid creating multiple classes
+
+list.sort(new Comparator<Employee>()){
+public int compare(Employee e1,Employee e2){
+----------return int ------------------
+}
+}
+
+
+In Java 8 lambda expressions is introduced to minimise writing anonymous implementation:
+
+It can be applied only for functional interfaces(having only one abstract method)
+
+list.sort((e1,e2) -> e1.getId()-e2.getId());//ascending order
+
+list.sort((e1,e2) -> e1.getId()-e2.getId());//descending order
+
+//sorting based on salary
+list.sort((e1,e2)->Double.compare(e1.getSalary()-e2.getSalary()));
+
+//sorting based on doj
+list.sort((e1,e2)->e1.getDoj().compareTo(e2.getDoj()));
+
+//sorting based on name
+list.sort((e1,e2)->e1.getName().compareTo(e2.getName()));
+
+
+
+Java Streams:
+
+These are data in the collections which you can process in an efficient way (without changing the existing datastructure) with less code like filtering,sorting,transforming,iterating.
+
+in streams we can use multiple filters to filter the data without changing the existing datastrcuture.
+
+
+in streams we have two types of operations.
+intermediate operations: filter,sorted,map
+terminal operations: forEach, collect
+
+filter() : It is used to apply the conditions on the stream to get only those data that matches to the condition.
+
+sorted() : It is used to apply the sorting logic using comparator.
+
+map() : It is used to transform a stream into another form, like transform employee to string or a person or number.
+
+collect() : It is used to convert from one collection to another collection.
+
+forEach() : It is used to iterate the string.
+
+
+
+Comparable vs comparator:
+
+in diary.
+
+
+
+
+
+
+
+PG:
+
+postgres stores all the data in a pgsql_data. we must create this folder first to start postgres.
+
+https://www.postgresql.org/download/windows/
+ziparchive hyperlink.
+
+To do below steps we should be in bin folder inside the extracted postgresql ziparchive.
+
+steps to perform:
+1. pgsql_data folder is created anywhere in system
+2. command for initializing the database(only once): initdb.exe -D C:\Users\admin\Desktop\pgsql_data -U postgres -W -E UTF8 -A scram-sha-256
+
+>>>it asks to enter a password and also to confirm password
+3. starting the database(done whenever you want to start the database):
+pg_ctl -D C:\Users\admin\Desktop\pgsql_data -l logfile start
+4. Login to the database with username and password
+
+
+Note: All the above steps are performed in the terminal
+
+datatypes:
+int
+bigint
+varchar
+json
+
+creating & connecting to db:
+
+create database npci_db;
+\c npci_db;
+To use the database.
+
+
+
+
+creating serials: generate numbers automatically starting from 1
+
+create table emplyee(id serial,name varchar(20));
+
+Creating sequence: when you want to start series from a particular number
+create sequence emp_seq start 500;
+
+Generating the sequence: insert into employee values(nextval('emp_seq'),'Alex');
+
+steps performed in hands on:
+
+initdb.exe -D C:\Users\admin\Desktop\pgsql_data -U postgres -W -E UTF8 -A scram-sha-256(creating user with name postgres and can create multiple users using same command with different username)
+
+pg_ctl -D C:\Users\admin\Desktop\pgsql_data -l logfile start(to start the database only once, not needed everytime)
+
+psql.exe -U postgres (To connect to database with the username which we created before)
+
+create database npci_db(create database)
+
+\c npci_db (To use the database)
+
+
+
+
+Parent and child table relationships:
+
+primary key and foreign key relationships
+customer table linked with account table.
+
+Full text search:
+
+It is mainly used to perform complex seraches where it can search the derived words from the base words by ignoring the stopwords like to,from,but,between,and
+
+inspire - inspires,inspirational,inspired
+
+postgres uses txvector to identify all the base and derived words from the dictionary.
+
+In full text search you will use 2 main functions
+1. to_tsvector(column): It takes the column and identifies all the base and derived words in the dictionary.
+2. to_tsvector(text):it takes the text that needs to be searched against the tsvector.
+
+
+index: It is used to increase the performance while searching.
+
+npci_db=# select * from test where to_tsvector(description) @@ to_tsquery('wish');
+ name  |           description
+-------+---------------------------------
+ three | my friendly wish to inspire you
+(1 row)
+
+
+npci_db=# alter table test add column documents tsvector;
+ALTER TABLE
+npci_db=# select * from test;
+ name  |              description              | documents
+-------+---------------------------------------+-----------
+ one   | my friend sent an inspirational story |
+ two   | my friends are my inspiration         |
+ three | my friendly wish to inspire you       |
+ four  | my friend inspired me                 |
+ five  | no friends                            |
+(5 rows)
+
+
+npci_db=# update test set documents=to_tsvector(description);
+UPDATE 5
+npci_db=# select * from test;
+ name  |              description              |                documents
+-------+---------------------------------------+------------------------------------------
+ one   | my friend sent an inspirational story | 'friend':2 'inspir':5 'sent':3 'stori':6
+ two   | my friends are my inspiration         | 'friend':2 'inspir':5
+ three | my friendly wish to inspire you       | 'friend':2 'inspir':5 'wish':3
+ four  | my friend inspired me                 | 'friend':2 'inspir':3
+ five  | no friends                            | 'friend':2
+(5 rows)
+
+
+npci_db=# select * from test where documents @@ to_tsquery('inspiration');
+ name  |              description              |                documents
+-------+---------------------------------------+------------------------------------------
+ one   | my friend sent an inspirational story | 'friend':2 'inspir':5 'sent':3 'stori':6
+ two   | my friends are my inspiration         | 'friend':2 'inspir':5
+ three | my friendly wish to inspire you       | 'friend':2 'inspir':5 'wish':3
+ four  | my friend inspired me                 | 'friend':2 'inspir':3
+(4 rows)
+
+
+npci_db=# explain analyse select * from test where documents @@ to_tsquery('inspiration');
+                                           QUERY PLAN
+-------------------------------------------------------------------------------------------------
+ Seq Scan on test  (cost=0.00..80.88 rows=1 width=268) (actual time=0.050..0.084 rows=4 loops=1)
+   Filter: (documents @@ to_tsquery('inspiration'::text))
+   Rows Removed by Filter: 1
+ Planning Time: 0.156 ms
+ Execution Time: 0.117 ms
+(5 rows)
+
+
+npci_db=# explain analyse select * from test where documents @@ to_tsquery('inspire');
+                                           QUERY PLAN
+-------------------------------------------------------------------------------------------------
+ Seq Scan on test  (cost=0.00..80.88 rows=1 width=268) (actual time=0.018..0.029 rows=4 loops=1)
+   Filter: (documents @@ to_tsquery('inspire'::text))
+   Rows Removed by Filter: 1
+ Planning Time: 0.061 ms
+ Execution Time: 0.037 ms
+(5 rows)
+
+
+npci_db=# explain analyse select * from test where documents @@ to_tsquery('friends');
+                                           QUERY PLAN
+-------------------------------------------------------------------------------------------------
+ Seq Scan on test  (cost=0.00..80.88 rows=1 width=268) (actual time=0.018..0.029 rows=5 loops=1)
+   Filter: (documents @@ to_tsquery('friends'::text))
+ Planning Time: 0.064 ms
+ Execution Time: 0.037 ms
+(4 rows)
+
+
+Transaction isolation level:
+
+by default transaction is read comitted for all the users, but we can create a transaction so that when multiple users are in multiple transactions they dont see other users
+modification even if they commit, this is called repeatable read.
+
