@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Accessing the backend api using javascript and getting the data</h1>
+    <input type="text" id="a">
+    <button onclick="getUser2()">Fetch</button>
+    <div id="b"></div>
+    <script type="text/javascript">
+        function getUsers(){
+            //1st approach 20 years ago - XMLHttpRequest
+            // creating XMLHttpRequest object
+            let xhr = new XMLHttpRequest();
+            let userId = document.getElementById("a").value;
+            let URL = `https://jsonplaceholder.typicode.com/users/${userId}`;
+            //initialize the request using open(httpMethod,URL)
+            xhr.open('GET',URL);//readyState=1
+            xhr.send();//readyState=2
+            xhr.onreadystatechange=() => {
+                if(xhr.readyState==4){
+                    //responseText is the property that stores the data
+                    document.getElementById("b").innerHTML=xhr.responseText;
+                }
+            }
+        }
+
+        //calling using promise
+        function getUser(){
+            let userId = document.getElementById("a").value;
+            let URL = `https://jsonplaceholder.typicode.com/users/${userId}`;
+            //fetch() returns a promise to resolve the response
+            fetch(URL)
+                .then(response=>response.json())
+                .then(json=>document.getElementById("b").innerHTML=json.username+' '+json.email);
+
+            // fetch() performs asynchronus operation
+
+            fetch(URL).then(response=>console.log('inside the then function'));
+            console.log("outside the then function");
+        }
+
+        //calling api using async/await
+        async function getUser2(){
+            let userId=document.getElementById("a").value;
+            let URL=`https://jsonplaceholder.typicode.com/users/${userId}`;
+            //fetch() returns promise to resolve the response
+            let res=await fetch(URL);//waits until promise is resolved or rejected, here response  is returned
+            let js=await res.json();//waits until promise is resolved or rejected, here response body is returned
+            document.getElementById('b').innerHTML=`<p>Id=${js.id}, Name=${js.username}</p>`;
+        }
+    </script>
+</body>
+</html>
