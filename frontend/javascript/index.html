@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <h1>Learning JS for React</h1>
+    <button onclick="increment()">+</button>
+    <button onclick="decrement()">-</button>
+    <div id="A"></div>
+    <br>
+    <button onclick="employee1.display()">Show</button>
+    <script src="main.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        let username = "sai";
+        let age = "23";
+        let emailId = "saijagadish.nukala@gmail.com";
+        document.write('<p>Name=' + username + ',Age = ' + age + ',Email = ' + emailId + '</p>');
+
+        //using template strings to avoid concatenation: backtick character below the ESC key with $
+        document.write(`<p>Name=${username},Age = ${age},Email = ${emailId}</p>`);
+
+        //arrays in javascript uses[]
+
+        let items = [1, 2, 3, 4, 5];
+        //iterating the array in multiple ways - traditional for loop, the forEach & map functions
+        //traditional for loop
+
+        for (let i = 0; i < items.length; i++) {
+            document.write(`<p>items at ${i}+${items[i]}</p>`);
+        }
+
+        //using foreach(callbackFn):callbackFn(item,index)
+        //callback is executed for each iteration by passing the iterated element to the 1st parameter
+        //& the index to the 2nd parameter
+        //items.forEach() {function(){ }} is not correct, because its a parameter to the forEach
+
+        items.forEach(
+            function (item, index) {
+                document.write(`<p>Item=${item} is at ${index}</p>`);
+            }
+        );
+
+
+
+        let anotherItems = items.map(function (item, index) {
+            return item + (item * 0.1);
+        });
+
+        //now anotherItems is an array generated from the map having 10% on each value
+
+        anotherItems.forEach(function (value, index) {
+            document.write(`<p>Item after transformation: ${value}</p>`)
+        });
+
+        class Employee {
+            //we use constructor keyword for constructors and this keyword to access the property
+            constructor(id, name, salary) {
+                this.id = id; // this.id will be a property of object
+                this.myname = name;
+                this.salary = salary;
+            }
+            // A function inside the class must be created without function keyword.
+            display() {
+                //you must always use this keyword to access the property
+                document.write(`<p>Id=${id},Name=${myname},Salary=${salary}</p>`);
+            }
+        }
+
+        //creating objects using new keyword
+
+        let employee1 = new Employee(200, 'Raju', 35000);
+        let employee2 = new Employee(300, 'sai', 47300);
+        employee1.display();
+        employee2.display();
+
+        //literal way of creating objects without classes or functions
+
+        let employee3 = {
+            id: 400, name: 'sai jagadish', salary: 45000,
+            print: function () {
+                document.write(`<p>Id=${id},name=${this.name},salary=${this.salary}</p>`);
+            }
+        };
+        employee3.print();
+
+
+
+        
+    </script>
+</body>
+
+</html>
