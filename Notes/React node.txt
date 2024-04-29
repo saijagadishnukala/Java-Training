@@ -16,3 +16,30 @@ We suggest that you begin by typing:
 
   cd myreactapp
   npm start
+
+
+
+document.write('items at' + i);
+
+fetch(URL)
+	.then(r=>r.json());
+
+
+
+
+
+void sum(response){
+	return response.json;
+}
+
+
+sum(1);
+
+
+
+React:
+
+In single page application there will only one main app which uses all the other components made.
+
+But if application is not single page application then other application will also be called.
+
